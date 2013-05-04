@@ -1,0 +1,8 @@
+2013-05-04  Georges Khaznadar  <georgesk@debian.org>
+
+	* Création du fichier Changelog
+	* création du projet bableur sur Github
+	* importation des fichiers realisés le 3 mai dans le clone de ce projet
+	* nommage cohérent des premiers fichiers, publication de
+	bableur2.html, bableur.css, bableur.js
+

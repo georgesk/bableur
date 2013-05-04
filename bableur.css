@@ -1,0 +1,4 @@
+html.busy, body.busy, body.busy * {  
+  cursor: wait !important;  
+}
+

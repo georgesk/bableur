@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Essai 2 pour exploiter un traducteur automatique</title> 
+    <meta name="author" content="Georges Khaznadar" />
+    <link href="bableur.css" rel="stylesheet" type="text/css" media="screen"/>
+
+  </head>
+
+  <body>
+    <h1>Essai 2 pour exploiter un traducteur automatique</h1>
+    <script type="text/javascript" src="jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="bableur.js"></script>
+    <form action="#">
+      <fieldset><legend>Langue de départ</legend>
+      <input type="button" value="traduire fr->en" onclick="traduire('o','fr','en','t');"/><br/>
+      <textarea cols="40" rows="4" id="o">Entrez un texte à traduire</textarea>
+      </fieldset>
+      <fieldset><legend>Traduction</legend>
+      <input type="button" value="traduire en->fr" onclick="traduire('t','en','fr','o');"/><br/>
+      <textarea cols="40" rows="4" id="t"></textarea>
+      </fieldset>
+    </form>
+  </body>
+</html>
