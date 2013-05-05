@@ -1,28 +1,50 @@
 
+/**
+ * Fonction pour traduire un texte court en appelant le
+ * service mymemory.translated.net
+ * @param areaIds liste d'ids de conteneurs de texte
+ * @param l liste de langues
+ **/
+function traduire(areaIds, l){
+    if (l.length < 2) return; // s'il reste moins de 2 langues, on a fini !
+    var o = $('#'+ areaIds[0]);
+    var t = $('#'+ areaIds[1]);
+    var langues = l[0]+'|'+l[1];
+    var nextAreaIds = areaIds.slice(1);
+    var nextL       = l.slice(1);
+    t.val("");                                     // efface la traduction
+    setWaiting(t, true);                           // début de l'attente
+    $.getJSON(
+	'http://mymemory.translated.net/api/get',  // service de traduction
+	{ q: o.val(), langpair : langues })        // paramètres
+	.done(function(data){                      // rappel en cas de réussite
+	    t.val(data.responseData.translatedText);//écrit la traduction
+	    setWaiting(t, false);                  // fin de l'attente 
+	    traduire(nextAreaIds, nextL);          // appel récursif
+	})
+	.fail(function(){                         // rappel en cas d'échec
+	    t.val("** Échec de la traduction **");// message d'erreur
+	    setWaiting(t, false);                 // fin de l'attente
+	    return;
+	});
+    return;
+}
 
 /**
- * Fonction pour traduire un texte court en appelant le service mymemory.translated.net
- * @param original l'identifiant d'un textarea contenant l'original
- * @param l1 langue d'origine
- * @param l2 langue cible
- * @param traduction l'identifiant d'un textarea pour la traduction
- */
-function traduire(original,l1,l2,traduction){
-    var o = $('#'+original);
-    var t = $('#'+traduction);
-    var langues = l1+'|'+l2;
-    setTimeout(function(){ // force l'interface utilisateur tout de suite
-	$("*").css("cursor", "progress") ; 
-	t.val(""); 
-	t.css("background-color","rgb(230,230,230)");
-    },0);
-    $.getJSON(
-	'http://mymemory.translated.net/api/get', 
-	{ q: o.val(), langpair : langues },
-	function(data){
-	    t.val(data.responseData.translatedText);
-	    $("*").css("cursor", "auto") ; 
-	    t.css("background-color","white");
-	}
-    );
+ * Fonction pour faire apparaître un élément comme "en attente"
+ * @param el l'élément à modifier
+ * @param state booléen ; vrai => "en attente", faux => "normal"
+ **/
+function setWaiting(el,state){
+    if(state){
+	setTimeout(function(){
+	    el.css("cursor", "progress") ; 
+	    el.css("background-color","rgb(230,230,230)");
+	},0);
+    } else {
+	setTimeout(function(){
+	    el.css("cursor", "auto") ; 
+	    el.css("background-color","white");
+	},0);
+    }
 }
