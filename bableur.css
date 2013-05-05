@@ -1,4 +1,8 @@
-html.busy, body.busy, body.busy * {  
-  cursor: wait !important;  
+.busy  {  
+  cursor: wait;
+  background-color: rgb(230,230,220);
 }
 
+fieldset.translator {
+    display: inline;
+}
