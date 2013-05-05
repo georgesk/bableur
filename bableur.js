@@ -89,7 +89,9 @@ function bableur_init(l, targetId){
  * @return l'objet jQuery prêt à servir
  **/
 function roundTranslateButton(l){
-    var text="Traduction circulaire : "+l.join(" -> ");
+    var listeCirculaire=l.slice(0); // recopie
+    listeCirculaire.push(l[0]);     // circularisation
+    var text="Traduction circulaire : "+listeCirculaire.join(" -> ");
     var areaIds=Array();
     for(var i=0; i<l.length; i++) areaIds.push("area"+i);
     var script="traduire("+JSON.stringify(areaIds)+", "+JSON.stringify(l)+", '"+l[0]+"')";
