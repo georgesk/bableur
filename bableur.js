@@ -18,7 +18,9 @@ function traduire(areaIds, l){
 	'http://mymemory.translated.net/api/get',  // service de traduction
 	{ q: o.val(), langpair : langues })        // paramètres
 	.done(function(data){                      // rappel en cas de réussite
-	    t.val(data.responseData.translatedText);//écrit la traduction
+	    var decoded =                          // décode les entités HTML
+		$("<div/>").html(data.responseData.translatedText).text();
+	    t.val(decoded);                        //écrit la traduction
 	    setWaiting(t, false);                  // fin de l'attente 
 	    traduire(nextAreaIds, nextL);          // appel récursif
 	})
