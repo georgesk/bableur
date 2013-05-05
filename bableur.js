@@ -27,7 +27,9 @@ function traduire(areaIds, l, endl){
     setWaiting(t, true);                           // début de l'attente
     $.getJSON(
 	'http://mymemory.translated.net/api/get',  // service de traduction
-	{ q: o.val(), langpair : langues })        // paramètres
+	{ q: o.val(),                              // paramètres
+	  langpair : langues,
+	  de: "georges.khaznadar@free.fr"})        // dont un e-mail valide
 	.done(function(data){                      // rappel en cas de réussite
 	    var decoded =                          // décode les entités HTML
 		$("<div/>").html(data.responseData.translatedText).text();
