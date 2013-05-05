@@ -11,17 +11,18 @@ function traduire(original,l1,l2,traduction){
     var o = $('#'+original);
     var t = $('#'+traduction);
     var langues = l1+'|'+l2;
-    t.val("");
-    t.css("background-color","rgb(180,180,180)");
-    $("*").css("cursor", "progress") ; // devrait afficher un cuseur d'attente
+    setTimeout(function(){ // force l'interface utilisateur tout de suite
+	$("*").css("cursor", "progress") ; 
+	t.val(""); 
+	t.css("background-color","rgb(230,230,230)");
+    },0);
     $.getJSON(
 	'http://mymemory.translated.net/api/get', 
 	{ q: o.val(), langpair : langues },
 	function(data){
 	    t.val(data.responseData.translatedText);
+	    $("*").css("cursor", "auto") ; 
+	    t.css("background-color","white");
 	}
     );
-    $("*").css("cursor", "auto") ; // remet le curseur normal
-    t.css("background-color","white");
 }
-
