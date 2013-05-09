@@ -74,7 +74,10 @@ function stackOldText(oldtext, newtext, n){
 function conserver(ancienTexte, nouveauTexte){
     var ok    = confirm("Voulez-vous conserver ce texte ?\n"+ancienTexte+"\n   ---->\n"+nouveauTexte);
     if (ok) {
-	var archiveCSV='"'+ancienTexte+'"; "'+nouveauTexte+'"';
+	var archiveCSV='"'+ancienTexte+
+	    '"; "'+nouveauTexte+
+	    '"; "'+$("#circulaire").val()
+	    +'"';
 	$("#archive").append($("<li>").text(archiveCSV));
     }
 }
@@ -145,7 +148,8 @@ function roundTranslateButton(l){
 	"<input>",
 	{ type: "button",
 	  onclick: script,
-	  value: text
+	  value: text,
+	  id : "circulaire"
 	}
     );
     return button;
