@@ -5,4 +5,29 @@
 
 fieldset.translator {
     display: inline;
+    width: 18em;
+}
+
+.ancienneTraduction {
+    font-size: 50%;
+    color:     gray;
+}
+
+li.lienDrole {
+    color: blue;
+    cursor: move;
+}
+
+#archiveBox {
+    border: 1px dashed navy;
+    margin: 3px;
+    padding: 3px;
+    float: left;
+}
+
+#translationBox {
+    border: 1px dashed navy;
+    margin: 3px;
+    padding: 3px;
+    clear: both;
 }

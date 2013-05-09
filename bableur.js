@@ -2,14 +2,15 @@
 /**
  * Fonction pour traduire un texte court en appelant le
  * service mymemory.translated.net
- * @param areaIds liste d'ids de conteneurs de texte
+ * @param listenum une liste de numéros de textes à traduire
+ * @param l liste de langues correspondant à ces textes
  * @param endl null ou la langue de départ si on veut une
  *  traduction circulaire
- * @param l liste de langues
  **/
-function traduire(areaIds, l, endl){
-    var o = $('#'+ areaIds[0]);
-    var t = $('#'+ areaIds[1]);
+function traduire(listenum, l, endl){
+    var o = $('#area'+ listenum[0]);
+    var t = $('#area'+ listenum[1]);
+    var n = listenum[1];        // numéro du texte destination
     var langues = l[0]+'|'+l[1];
 
     if (l.length == 0) return;  // traduction circulaire finie
@@ -17,13 +18,15 @@ function traduire(areaIds, l, endl){
 	if (endl === undefined) return;     // traduction non circulaire
 	else {                  // traduction circulaire demandée
 	    t = $('#area0');
+	    n = 0;
 	    langues = l[0]+'|'+endl;
 	}
     }
 
-    var nextAreaIds = areaIds.slice(1);
+    var nextList = listenum.slice(1);
     var nextL       = l.slice(1);
-    t.val("");                                     // efface la traduction
+    var oldText = t.val();
+    t.val("");
     setWaiting(t, true);                           // début de l'attente
     $.getJSON(
 	'http://mymemory.translated.net/api/get',  // service de traduction
@@ -34,15 +37,46 @@ function traduire(areaIds, l, endl){
 	    var decoded =                          // décode les entités HTML
 		$("<div/>").html(data.responseData.translatedText).text();
 	    t.val(decoded);                        //écrit la traduction
+	    stackOldText(oldText, decoded, n);     // range l'ancien texte
 	    setWaiting(t, false);                  // fin de l'attente 
-	    traduire(nextAreaIds, nextL, endl);    // appel récursif
+	    traduire(nextList, nextL, endl);       // appel récursif
 	})
-	.fail(function(){                         // rappel en cas d'échec
-	    t.val("** Échec de la traduction **");// message d'erreur
-	    setWaiting(t, false);                 // fin de l'attente
+	.fail(function(){                          // rappel en cas d'échec
+	    t.val("** Échec de la traduction **"); // message d'erreur
+	    setWaiting(t, false);                  // fin de l'attente
 	    return;
 	});
     return;
+}
+
+/**
+ * empile l'ancien texte d'une traduction s'il est non vide, sous
+ * le champ texte modifié.
+ * @param oldtext l'ancien texte
+ * @param newtext le nouveau texte
+ * @param n le numéro du champ
+ **/
+function stackOldText(oldtext, newtext, n){
+    if (oldtext.length > 0 && oldtext != newtext){
+	var stack = $('#pile'+n);
+	var li    = $("<li>", {class: 'lienDrole'})
+	    .text(oldtext)
+	    .click(function(){conserver(oldtext, newtext)});
+	stack.prepend(li);
+    }
+}
+
+/**
+ * conserve si on veut un ancien texte et son remplaçant
+ * @param ancienTexte l'ancien texte
+ * @param nouveauTexte le nouveau texte
+ **/
+function conserver(ancienTexte, nouveauTexte){
+    var ok    = confirm("Voulez-vous conserver ce texte ?\n"+ancienTexte+"\n   ---->\n"+nouveauTexte);
+    if (ok) {
+	var archiveCSV='"'+ancienTexte+'"; "'+nouveauTexte+'"';
+	$("#archive").append($("<li>").text(archiveCSV));
+    }
 }
 
 /**
@@ -74,12 +108,24 @@ function setWaiting(el,state){
  **/
 function bableur_init(l, targetId){
     var target=$("#"+targetId);
-    target.append(roundTranslateButton(l));
-    target.append($("<hr>"));
+    /******************************
+     * boîte pour l'archivage de traductions
+     *****************************/
+    target.append($("<div>", {id: "archiveBox"})
+		  .append($("<h2>").text("archive de traductions"))
+		  .append($("<ol>", {class : "archive", id : "archive"}))
+		 );
+    /******************************
+     * boîte pour les traductions
+     *****************************/
+    var trad = $("<div>", {id: "translationBox"})
+    target.append(trad);
+    trad.append(roundTranslateButton(l));
+    trad.append($("<br>"));
     for (var i=0; i < l.length; i++){
-	target.append(fsTraduction(l,i));
+	trad.append(fsTraduction(l,i));
     }
-    $("#area0").text("Comme un vol de gerfauts hors du charnier natal, Fatigués de porter leurs misères hautaines ...");
+    $("#area0").val("Comme un vol de gerfauts hors du charnier natal, Fatigués de porter leurs misères hautaines ...");
 }
 
 /**
@@ -92,9 +138,9 @@ function roundTranslateButton(l){
     var listeCirculaire=l.slice(0); // recopie
     listeCirculaire.push(l[0]);     // circularisation
     var text="Traduction circulaire : "+listeCirculaire.join(" -> ");
-    var areaIds=Array();
-    for(var i=0; i<l.length; i++) areaIds.push("area"+i);
-    var script="traduire("+JSON.stringify(areaIds)+", "+JSON.stringify(l)+", '"+l[0]+"')";
+    var listenum=Array();
+    for(var i=0; i<l.length; i++) listenum.push(i);
+    var script="traduire("+JSON.stringify(listenum)+", "+JSON.stringify(l)+", '"+l[0]+"')";
     var button=$(
 	"<input>",
 	{ type: "button",
@@ -109,6 +155,8 @@ function roundTranslateButton(l){
 /**
  * crée un objet jQuery comprenant un bouton et un champ de texte
  * le champ de texte possède un identifiant numéroté "area" +n
+ * en plus, un conteneur <ol id='pileN'> est ajouté pour contenir
+ * les anciennes versions du texte
  * @param l une liste de langues
  * @param n l'index sur la première langue à considérer dans la liste
  * @return l'objet jQuery prêt à servir
@@ -133,6 +181,7 @@ function fsTraduction(l,n){
 		       rows: "4",
 		       id: "area"+n})
 		   );
+    fieldset.append($("<ol>",{id : "pile"+n, class: "ancienneTraduction"}));
     return fieldset;
 }
 
@@ -148,7 +197,7 @@ function invoqueTraduire(l,n){
     var from = n
     var to   = (n+1) % l.length;
     var callback="traduire("+
-	JSON.stringify(["area"+from, "area"+to])+
+	JSON.stringify([from, to])+
 	", "+
 	JSON.stringify([l[from],l[to]])+
 	");"
