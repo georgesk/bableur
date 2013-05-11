@@ -13,12 +13,48 @@ fieldset.translator {
     color:     gray;
 }
 
+.drapeau {
+    margin: 0 1ex 1ex 0;
+    background: rgb(210,210,210);
+    border:1px navy solid;
+    border-radius:5px;
+}
+
+.colonne { 
+    width: 110px; 
+    float: left; 
+    padding-bottom: 12px;
+}
+
 li.lienDrole {
     color: blue;
     cursor: move;
 }
 
+.langBoxTitle {
+    text-align: center;
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.langBoxHelp {
+    text-align: center;
+}
+
+.langBoxFields {
+    border: 1px black solid;
+    padding:10px;
+}
+
 #archiveBox {
+    border: 1px dashed navy;
+    margin: 3px;
+    padding: 3px;
+    float: left;
+    right: auto;
+}
+
+#langBox {
     border: 1px dashed navy;
     margin: 3px;
     padding: 3px;
@@ -30,4 +66,17 @@ li.lienDrole {
     margin: 3px;
     padding: 3px;
     clear: both;
+}
+
+
+/* styles en relation avec jquery-ui */
+
+.ui-sortable-placeholder {
+    border: 1px dotted gray; 
+    visibility: visible !important; 
+    height: 12px !important;
+}
+
+.ui-sortable-placeholder * { 
+    visibility: hidden; 
 }
