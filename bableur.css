@@ -21,7 +21,7 @@ fieldset.translator {
 }
 
 .colonne { 
-    width: 110px; 
+    width: 150px; 
     float: left; 
     padding-bottom: 12px;
 }
@@ -66,6 +66,7 @@ li.lienDrole {
     margin: 3px;
     padding: 3px;
     clear: both;
+    background: rgba(255,255,255,0.5);     
 }
 
 
@@ -80,3 +81,10 @@ li.lienDrole {
 .ui-sortable-placeholder * { 
     visibility: hidden; 
 }
+body{background-image: URL(tourbabel.jpg); background-size: cover;}
+
+.boitetranslator{background: white; display: inline;  }
+
+#date{position:absolute;
+      bottom:0;
+      }
