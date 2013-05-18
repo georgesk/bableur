@@ -1,1 +1,8 @@
-*~ *.bak .lib
+*~
+*.bak
+*.pyc
+.lib
+CherryPy-3.2.2/build
+CherryPy-3.2.2/dist
+CherryPy-3.2.2/CherryPy.egg-info
+example.db
