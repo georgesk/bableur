@@ -1,5 +1,6 @@
 MANIFEST.in
 README.txt
+setup.cfg
 setup.py
 CherryPy.egg-info/PKG-INFO
 CherryPy.egg-info/SOURCES.txt
