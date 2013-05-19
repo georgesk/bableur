@@ -1,0 +1,323 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<title>Serveur de perles de Bableur:  Fichier source de serveur0.py</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { searchBox.OnSelectItem(0); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="babel.png"/></td>
+  <td style="padding-left: 0.5em;">
+   <div id="projectname">Serveur de perles de Bableur
+   &#160;<span id="projectnumber">2.1</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.8.1.2 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>Page&#160;principale</span></a></li>
+      <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li class="current"><a href="files.html"><span>Fichiers</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="Recherche" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>Liste&#160;des&#160;fichiers</span></a></li>
+    </ul>
+  </div>
+</div><!-- top -->
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>Tout</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Fonctions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">serveur0.py</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">#!/usr/bin/python</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"># -*- coding: utf-8 -*-</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="keyword">import</span> os.path</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;current_dir       = os.path.dirname(os.path.abspath(__file__))</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;current_ipaddress = <span class="stringliteral">&#39;127.0.0.1&#39;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;current_port      = 8080</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">import</span> cherrypy, sqlite3, os.path</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">class </span>TableFormat(object):</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="stringliteral">&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="stringliteral">    Une classe pour préciser un format de tables à afficher en HTML,</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="stringliteral">    lié à une requête de base de données.</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="stringliteral">    On peut faire des classes dérivées de celle-ci pour fabriquer des</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="stringliteral">    tableaux avec des propriétés particulières.</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="stringliteral">    &quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="code" href="classserveur0_1_1TableFormat.html">   19</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classserveur0_1_1TableFormat.html#a28369614a6b09ff4a9717ba492d05db1" title="Constructeur.">__init__</a>(self, tname, tclasse, columns, formats, names, classes, header=True):</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="stringliteral">&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="stringliteral">        Constructeur</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="stringliteral">        @param tname nom de la table dans la BDD</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="stringliteral">        @param tclasse classe CSS pour le tableau</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="stringliteral">        @param columns un tuple de colonnes de bases de données</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="stringliteral">        @param formats un tuple de chaînes de format pour les données</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="stringliteral">        @param names noms des contenus des colonnes pour faire des titres</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="stringliteral">        @param classes classes CSS pour les colonnes</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="stringliteral">        @param header vrai (par défaut) si on veut une ligne de titres</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="stringliteral">        &quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="comment">## nom de la table dans la BDD</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="code" href="classserveur0_1_1TableFormat.html#a28369614a6b09ff4a9717ba492d05db1">   31</a></span>&#160;        self.<a class="code" href="classserveur0_1_1TableFormat.html#a7ca1b72c89129cd35c693c5214c4b455" title="nom de la table dans la BDD">tname</a>=tname</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="comment">## classe CSS à appliquer au tableau</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="code" href="classserveur0_1_1TableFormat.html#a7ca1b72c89129cd35c693c5214c4b455">   33</a></span>&#160;        self.<a class="code" href="classserveur0_1_1TableFormat.html#a83ac09eac8925e721e65ab568737efb4" title="classe CSS à appliquer au tableau">tclasse</a>=tclasse</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="comment">## noms de colonnes de la table dans la BDD</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="code" href="classserveur0_1_1TableFormat.html#a83ac09eac8925e721e65ab568737efb4">   35</a></span>&#160;        self.<a class="code" href="classserveur0_1_1TableFormat.html#a85df7bc34c160f189b40022a127c9e48" title="noms de colonnes de la table dans la BDD">columns</a>=columns</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="comment">## chaînes de formats applicables pour afficher ces colonnes</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="code" href="classserveur0_1_1TableFormat.html#a85df7bc34c160f189b40022a127c9e48">   37</a></span>&#160;        self.<a class="code" href="classserveur0_1_1TableFormat.html#ac6f03b5a5813205f3a5cd078a4ab4ed9" title="chaînes de formats applicables pour afficher ces colonnes">formats</a>=formats</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="comment">## titres compréhensibles par des humains pour les colonnes</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="code" href="classserveur0_1_1TableFormat.html#ac6f03b5a5813205f3a5cd078a4ab4ed9">   39</a></span>&#160;        self.<a class="code" href="classserveur0_1_1TableFormat.html#a73b8f9d99701199637d25fcb4070097f" title="titres compréhensibles par des humains pour les colonnes">names</a>=names</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="comment">## classes CSS à appliquer aux données de ces colonnes</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="code" href="classserveur0_1_1TableFormat.html#a73b8f9d99701199637d25fcb4070097f">   41</a></span>&#160;        self.<a class="code" href="classserveur0_1_1TableFormat.html#a50c88d57e7899ee1ea69d4098d9d346c" title="classes CSS à appliquer aux données de ces colonnes">classes</a>=classes</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="comment">## booléen : présence/absence de titres pour l&#39;affichage des colonnes</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="code" href="classserveur0_1_1TableFormat.html#a50c88d57e7899ee1ea69d4098d9d346c">   43</a></span>&#160;        self.<a class="code" href="classserveur0_1_1TableFormat.html#ab4f65112ee0e74d60aec1c982c3de042" title="booléen : présence/absence de titres pour l&#39;affichage des colonnes">header</a>=header</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordflow">return</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="code" href="classserveur0_1_1TableFormat.html#ab4f65112ee0e74d60aec1c982c3de042">   45</a></span>&#160;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">def </span><a class="code" href="classserveur0_1_1TableFormat.html#a8a1d2a45703c0322e5e071913dbaa87a" title="Fabrique une ligne de titres.">entete</a>(self):</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="stringliteral">&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="stringliteral">        Fabrique une ligne de titres</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="stringliteral">        @return une ligne de titres de colonnes avec les bonnes classes CSS</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="stringliteral">        &quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        result= <span class="stringliteral">u&quot;&lt;tr&gt;&quot;</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keywordflow">for</span> cn <span class="keywordflow">in</span> zip(self.<a class="code" href="classserveur0_1_1TableFormat.html#a50c88d57e7899ee1ea69d4098d9d346c" title="classes CSS à appliquer aux données de ces colonnes">classes</a>, self.<a class="code" href="classserveur0_1_1TableFormat.html#a73b8f9d99701199637d25fcb4070097f" title="titres compréhensibles par des humains pour les colonnes">names</a>):</div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="code" href="classserveur0_1_1TableFormat.html#a8a1d2a45703c0322e5e071913dbaa87a">   53</a></span>&#160;            result += <span class="stringliteral">u&quot;&lt;th class=&#39;%s&#39;&gt;%s&lt;/th&gt;&quot;</span> % cn</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        result+= <span class="stringliteral">u&quot;&lt;/tr&gt;&quot;</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordflow">return</span> result</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">def </span><a class="code" href="classserveur0_1_1TableFormat.html#ac9b3492e63716abf5a0098d975c60523" title="Fabrique le corps du tableau.">tbody</a>(self,c):</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="stringliteral">&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="stringliteral">        Fabrique le corps du tableau</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="stringliteral">        @param c un curseur de BDD déjà initialisé</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="stringliteral">        @return une suite de lignes pour un tableau HTML</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="stringliteral">        &quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        result=<span class="stringliteral">&quot;&quot;</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        request=<span class="stringliteral">&quot;SELECT &quot;</span> + <span class="stringliteral">&quot;, &quot;</span>.join(self.<a class="code" href="classserveur0_1_1TableFormat.html#a85df7bc34c160f189b40022a127c9e48" title="noms de colonnes de la table dans la BDD">columns</a>) + <span class="stringliteral">&quot; FROM &quot;</span>+ self.<a class="code" href="classserveur0_1_1TableFormat.html#a7ca1b72c89129cd35c693c5214c4b455" title="nom de la table dans la BDD">tname</a></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordflow">for</span> ligne <span class="keywordflow">in</span> c.execute(request):</div>
+<div class="line"><a name="l00066"></a><span class="lineno"><a class="code" href="classserveur0_1_1TableFormat.html#ac9b3492e63716abf5a0098d975c60523">   66</a></span>&#160;            result+= <span class="stringliteral">u&quot;&lt;tr&gt;&quot;</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <span class="keywordflow">for</span> li,fo,cl <span class="keywordflow">in</span> zip(ligne, self.<a class="code" href="classserveur0_1_1TableFormat.html#ac6f03b5a5813205f3a5cd078a4ab4ed9" title="chaînes de formats applicables pour afficher ces colonnes">formats</a>, self.<a class="code" href="classserveur0_1_1TableFormat.html#a50c88d57e7899ee1ea69d4098d9d346c" title="classes CSS à appliquer aux données de ces colonnes">classes</a>):</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                fstring=<span class="stringliteral">u&quot;&lt;td class=&#39;%%s&#39;&gt;%s&lt;/td&gt;&quot;</span> % fo</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                result += fstring % (cl,li)</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            result+= <span class="stringliteral">u&quot;&lt;/tr&gt;\n&quot;</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordflow">return</span> result</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keyword">def </span><a class="code" href="classserveur0_1_1TableFormat.html#a81f945c008d8945bafa095e28029be88" title="Fabrique le tableau HTML.">table</a>(self,c):</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="stringliteral">&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="stringliteral">        Fabrique le tableau HTML</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="stringliteral">        @param c un curseur de BDD déjà initialisé</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="stringliteral">        @return tableau HTML</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="stringliteral">        &quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        result = <span class="stringliteral">u&quot;&lt;table&gt;\n&quot;</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordflow">if</span> self.<a class="code" href="classserveur0_1_1TableFormat.html#ab4f65112ee0e74d60aec1c982c3de042" title="booléen : présence/absence de titres pour l&#39;affichage des colonnes">header</a>:</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            result += self.<a class="code" href="classserveur0_1_1TableFormat.html#a8a1d2a45703c0322e5e071913dbaa87a" title="Fabrique une ligne de titres.">entete</a>()</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        result += self.<a class="code" href="classserveur0_1_1TableFormat.html#ac9b3492e63716abf5a0098d975c60523" title="Fabrique le corps du tableau.">tbody</a>(c)</div>
+<div class="line"><a name="l00083"></a><span class="lineno"><a class="code" href="classserveur0_1_1TableFormat.html#a81f945c008d8945bafa095e28029be88">   83</a></span>&#160;        result += <span class="stringliteral">&quot;&lt;/table&gt;\n&quot;</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keywordflow">return</span> result</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keyword">class </span><a class="code" href="classserveur0_1_1PerleServer.html" title="Une classe pour servir les perles de traduction de Bableur, et pour permettre de voter pour celles-ci...">PerleServer</a>(object):</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="stringliteral">&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="stringliteral">    Une classe pour servir les perles de traduction de Bableur, et pour</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="stringliteral">    permettre de voter pour celles-ci. Cette classe permet l&#39;implémentation</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="stringliteral">    d&#39;une page web unique (index) pour le serveur Cherrypy</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="stringliteral">    &quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keyword">def </span><a class="code" href="classserveur0_1_1TableFormat.html#a28369614a6b09ff4a9717ba492d05db1" title="Constructeur.">__init__</a>(self, dbName):</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="stringliteral">&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="stringliteral">        Constructeur de la classe PerleServer. Crée une base de</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="stringliteral">        données si celle-ci n&#39;existe pas, sinon rouvre la base de données</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="stringliteral">        existante.</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno"><a class="code" href="classserveur0_1_1PerleServer.html">   97</a></span>&#160;<span class="stringliteral">        @param dbName le nom du fichier de base de données</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="stringliteral">        &quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="comment">## nom de la base de données utilisée</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        self.<a class="code" href="classserveur0_1_1PerleServer.html#a20eb2470f769503715689eceab4f3925" title="nom de la base de données utilisée">dbName</a>=dbName</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keywordflow">if</span> os.path.exists(dbName):</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            <span class="comment"># on ne recrée pas une base de données préexistante</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            <span class="keywordflow">return</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        conn = sqlite3.connect(dbName)</div>
+<div class="line"><a name="l00105"></a><span class="lineno"><a class="code" href="classserveur0_1_1PerleServer.html#a0ad68b7f2dc8e7b99c29c73b32ad6f72">  105</a></span>&#160;        c = conn.cursor()</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="comment"># Création de la table &quot;perles&quot;</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno"><a class="code" href="classserveur0_1_1PerleServer.html#a20eb2470f769503715689eceab4f3925">  107</a></span>&#160;        c.execute(<span class="stringliteral">&#39;&#39;&#39;CREATE TABLE perles</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="stringliteral">             (orig TEXT, trad TEXT, lang TEXT, datecreated DATE, id INTEGER PRIMARY KEY ASC)&#39;&#39;&#39;</span>)</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <span class="comment"># Création de la table &quot;votes&quot;</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        c.execute(<span class="stringliteral">&quot;&quot;&quot;CREATE TABLE votes</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="stringliteral">              (perleId INTEGER, pseudo TEXT, datevote DATE, id INTEGER PRIMARY KEY ASC)&quot;&quot;&quot;</span>)</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        conn.commit()</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        conn.close()</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keyword">def </span><a class="code" href="classserveur0_1_1PerleServer.html#ab3871b0723c60a62e8ba11b86074e42f" title="Définit les en-têtes de pages HTML, qui incluent l&#39;activation de la bibliothèque jQuery, des indications de style, et un script pour les boîtes de dialogues modales.">headerHtml</a>(self, title=u&quot;Serveur de perles basé sur CherryPy&quot;):</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        <span class="stringliteral">&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="stringliteral">        Définit les en-têtes de pages HTML, qui incluent l&#39;activation</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="stringliteral">        de la bibliothèque jQuery, des indications de style, et un</span></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="stringliteral">        script pour les boîtes de dialogues modales.</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="stringliteral">        @param title le titre de la page ; </span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="stringliteral">        par défaut : &quot;Serveur de perles basé sur CherryPy&quot;</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="stringliteral">        @return le contenu du nœud &lt;head&gt; pour les pages HTML</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="stringliteral">        &quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="keywordflow">return</span> <span class="stringliteral">u&quot;&quot;&quot;\</span></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="stringliteral">&lt;head&gt;</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="stringliteral">  &lt;title&gt;%s&lt;/title&gt;</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="stringliteral">  &lt;link rel=&quot;icon&quot; href=&quot;/perle.ico&quot; type=&quot;image/x-icon&quot; /&gt;</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="stringliteral">  &lt;link rel=&quot;shotcut icon&quot; href=&quot;/perle.ico&quot; /&gt;</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="stringliteral">  &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;style.css&quot;/&gt;</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="stringliteral">  &lt;link rel=&quot;stylesheet&quot; href=&quot;jquery-ui/themes/base/jquery.ui.all.css&quot;/&gt;</span></div>
+<div class="line"><a name="l00131"></a><span class="lineno"><a class="code" href="classserveur0_1_1PerleServer.html#ab3871b0723c60a62e8ba11b86074e42f">  131</a></span>&#160;<span class="stringliteral">  &lt;script type=&quot;text/javascript&quot; src=&quot;jquery-ui/jquery-1.9.1.js&quot;&gt;&lt;/script&gt;</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="stringliteral">  &lt;script type=&quot;text/javascript&quot; src=&quot;jquery-ui/ui/jquery.ui.core.js&quot;&gt;&lt;/script&gt;</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="stringliteral">  &lt;script type=&quot;text/javascript&quot; src=&quot;jquery-ui/ui/jquery.ui.widget.js&quot;&gt;&lt;/script&gt;</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="stringliteral"></span></div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="stringliteral">  &lt;script type=&quot;text/javascript&quot; src=&quot;jquery-ui/ui/jquery.ui.mouse.js&quot;&gt;&lt;/script&gt;</span></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="stringliteral">  &lt;script type=&quot;text/javascript&quot; src=&quot;jquery-ui/ui/jquery.ui.draggable.js&quot;&gt;&lt;/script&gt;</span></div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="stringliteral">  &lt;script type=&quot;text/javascript&quot; src=&quot;jquery-ui/ui/jquery.ui.position.js&quot;&gt;&lt;/script&gt;</span></div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="stringliteral">  &lt;script type=&quot;text/javascript&quot; src=&quot;jquery-ui/ui/jquery.ui.resizable.js&quot;&gt;&lt;/script&gt;</span></div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="stringliteral">  &lt;script type=&quot;text/javascript&quot; src=&quot;jquery-ui/ui/jquery.ui.button.js&quot;&gt;&lt;/script&gt;</span></div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="stringliteral">  &lt;script type=&quot;text/javascript&quot; src=&quot;jquery-ui/ui/jquery.ui.dialog.js&quot;&gt;&lt;/script&gt;</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="stringliteral">  &lt;script type=&quot;text/javascript&quot;&gt;</span></div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="stringliteral">    //// s&#39;il y a un dialogue modal dans la page, il est affiché.</span></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="stringliteral">    $(function() {</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="stringliteral">      $( &quot;#dialog-modal&quot; ).dialog({</span></div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="stringliteral">        width: 500,</span></div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="stringliteral">        modal: true</span></div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="stringliteral">      });</span></div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="stringliteral">    });</span></div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="stringliteral">  &lt;/script&gt;</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="stringliteral">&lt;/head&gt;</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="stringliteral">&quot;&quot;&quot;</span>  % title</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="keyword">def </span><a class="code" href="classserveur0_1_1PerleServer.html#a5f83eb29a84de401bd40aad63eac152e" title="affiche une boîte de dialogue modale">modalDialog</a>(self, title, contents):</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        <span class="stringliteral">&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="stringliteral">        affiche une boîte de dialogue modale</span></div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="stringliteral">        @param title le titre de la boîte</span></div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="stringliteral">        @param contents le contenu de la boîte</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="stringliteral">        &quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        <span class="keywordflow">return</span> <span class="stringliteral">u&quot;&quot;&quot;\</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="stringliteral">&lt;div id=&quot;dialog-modal&quot; title=&quot;%s&quot;&gt;</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="stringliteral">    %s</span></div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="stringliteral">&lt;/div&gt;</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="stringliteral">&quot;&quot;&quot;</span> %(title, contents)</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;      </div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    <span class="keyword">def </span><a class="code" href="classserveur0_1_1PerleServer.html#a7d784e893577e56f334179c3966aa050" title="Implémentation du service en une seule page (index).">index</a>(self, phrase1=None, phrase2=None, langues=None, *args, **kw):</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        <span class="stringliteral">&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00167"></a><span class="lineno"><a class="code" href="classserveur0_1_1PerleServer.html#a5f83eb29a84de401bd40aad63eac152e">  167</a></span>&#160;<span class="stringliteral">        Implémentation du service en une seule page (index). Les arguments</span></div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="stringliteral">        arrivent par un méthode GET.</span></div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="stringliteral">        @param phrase1 phrase avant traduction</span></div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="stringliteral">        @param phrase2 phrase après traduction</span></div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="stringliteral">        @param langues une chaîne de langues pour la traduction</span></div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="stringliteral">        @param *args liste des arguments non nommés de la requête</span></div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="stringliteral">        (pas utilisée dans ce contexte)</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="stringliteral">        @param **kw dictionnaire des arguments nommés de la requête</span></div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="stringliteral">        (sert à éviter un blocage au cas où des paramètres inattendus sont</span></div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="stringliteral">        reçus lors d&#39;une requête)</span></div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="stringliteral">        &quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        conn = sqlite3.connect(self.<a class="code" href="classserveur0_1_1PerleServer.html#a20eb2470f769503715689eceab4f3925" title="nom de la base de données utilisée">dbName</a>)</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        c = conn.cursor()</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="comment">##########################################</span></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        <span class="comment"># En-tête HTML</span></div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="comment">##########################################</span></div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        result=<span class="stringliteral">u&quot;&lt;html&gt;\n&quot;</span>+self.<a class="code" href="classserveur0_1_1PerleServer.html#ab3871b0723c60a62e8ba11b86074e42f" title="Définit les en-têtes de pages HTML, qui incluent l&#39;activation de la bibliothèque jQuery, des indications de style, et un script pour les boîtes de dialogues modales.">headerHtml</a>()+<span class="stringliteral">u&quot;&lt;body&gt;\n&quot;</span></div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        <span class="comment">##########################################</span></div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        <span class="comment"># traitement d&#39;une requête d&#39;ajout dans la base de données</span></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        <span class="comment">##########################################</span></div>
+<div class="line"><a name="l00187"></a><span class="lineno"><a class="code" href="classserveur0_1_1PerleServer.html#a7d784e893577e56f334179c3966aa050">  187</a></span>&#160;        <span class="keywordflow">if</span> (phrase1 <span class="keywordflow">and</span> phrase2 <span class="keywordflow">and</span> langues):</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;            d=<span class="stringliteral">u&quot;%s&quot;</span> %datetime.now()</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;            c.execute(<span class="stringliteral">&quot;&quot;&quot;INSERT INTO perles </span></div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="stringliteral">                      (orig, trad, lang, datecreated)</span></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="stringliteral">                      VALUES (?,?,?,?)&quot;&quot;&quot;</span>,</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;                      (phrase1, phrase2, langues, d))</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;            conn.commit()</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;            result+= self.<a class="code" href="classserveur0_1_1PerleServer.html#a5f83eb29a84de401bd40aad63eac152e" title="affiche une boîte de dialogue modale">modalDialog</a>(<span class="stringliteral">u&quot;Modification de la base de données&quot;</span>,</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;                                      [phrase1, phrase2, langues, d])</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        <span class="comment">##########################################</span></div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        <span class="comment"># traitement par défaut : on affiche le contenu de la BDD</span></div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        <span class="comment">##########################################</span></div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        c.execute(<span class="stringliteral">&quot;SELECT count(*) FROM perles&quot;</span>)</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="comment"># self.conn.commit()</span></div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        compte = c.fetchone()[0]</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        result+= <span class="stringliteral">u&quot;&lt;h1&gt;La base de données contient %d perles :&lt;/h1&gt;&quot;</span> %compte</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        <span class="comment">##########################################</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        <span class="comment"># tableau des perles existantes</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        <span class="comment">##########################################</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        tf= <a class="code" href="classserveur0_1_1TableFormat.html" title="Une classe pour préciser un format de tables à afficher en HTML, lié à une requête de base de données...">TableFormat</a>(</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;            <span class="stringliteral">&quot;perles&quot;</span>,</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;            <span class="stringliteral">&quot;perleTable&quot;</span>,</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;            (<span class="stringliteral">&quot;id&quot;</span>, <span class="stringliteral">&quot;orig&quot;</span>, <span class="stringliteral">&quot;trad&quot;</span>, <span class="stringliteral">&quot;lang&quot;</span>, <span class="stringliteral">&quot;datecreated&quot;</span>),</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;            (<span class="stringliteral">&quot;%03d&quot;</span>,<span class="stringliteral">&quot;%s&quot;</span>,  <span class="stringliteral">&quot;%s&quot;</span>,   <span class="stringliteral">&quot;%s&quot;</span>,   <span class="stringliteral">&quot;%s&quot;</span>),</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;            (<span class="stringliteral">u&quot;Id&quot;</span>,<span class="stringliteral">u&quot;Phrase de départ&quot;</span>,<span class="stringliteral">u&quot;Phrase d&#39;arrivée&quot;</span>,<span class="stringliteral">u&quot;Chaîne de langues&quot;</span>,<span class="stringliteral">u&quot;Date d&#39;enregistrement&quot;</span>),</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;            (<span class="stringliteral">&quot;perleid&quot;</span>,<span class="stringliteral">&quot;p1&quot;</span>,<span class="stringliteral">&quot;p2&quot;</span>,<span class="stringliteral">&quot;lang&quot;</span>,<span class="stringliteral">&quot;date&quot;</span>)</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;            )</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        result += tf.table(c)</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        <span class="comment">##########################################</span></div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;        <span class="comment"># fin du traitement par défaut</span></div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        <span class="comment">##########################################</span></div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        result += <span class="stringliteral">&quot;&lt;/body&gt;&quot;</span></div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        conn.close()</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        <span class="keywordflow">return</span> result</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    index.exposed = <span class="keyword">True</span></div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="keywordflow">if</span> __name__==<span class="stringliteral">&#39;__main__&#39;</span>:</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    cherrypy.quickstart(<a class="code" href="classserveur0_1_1PerleServer.html" title="Une classe pour servir les perles de traduction de Bableur, et pour permettre de voter pour celles-ci...">PerleServer</a>(<span class="stringliteral">&#39;example.db&#39;</span>), config=<span class="stringliteral">&quot;serveur0.conf&quot;</span>)</div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Généré le Dimanche Mai 19 2013 17:52:20 pour Serveur de perles de Bableur par &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.1.2
+</small></address>
+</body>
+</html>
