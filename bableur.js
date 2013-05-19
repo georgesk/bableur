@@ -66,6 +66,21 @@ function stackOldText(oldtext, newtext, n){
   }
 }
 
+// implementation d'un système pour formater les chaînes de caractères
+// récupéré de http://stackoverflow.com/questions/610406/
+// titre : javascript-equivalent-to-printf-string-format
+if (!String.prototype.format) {
+  String.prototype.format = function() {
+    var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) { 
+      return typeof args[number] != 'undefined'
+        ? args[number]
+        : match
+      ;
+    });
+  };
+}
+
 /**
  * Conserve, si on veut, un ancien texte et son remplaçant.
  * @param ancienTexte l'ancien texte
@@ -74,11 +89,20 @@ function stackOldText(oldtext, newtext, n){
 function conserver(ancienTexte, nouveauTexte){
   var ok    = confirm("Voulez-vous conserver ce texte ?\n"+ancienTexte+"\n   ---->\n"+nouveauTexte);
   if (ok) {
-    var archiveCSV='"'+ancienTexte+
-      '"; "'+nouveauTexte+
-      '"; "'+$("#circulaire").val()
-      +'"';
-    $("#archive").append($("<li>").text(archiveCSV));
+    var langues = $("#circulaire").val();
+    var archiveCSV='"{0}"; "{1}"; "{2}"'
+      .format(ancienTexte,nouveauTexte,langues);
+    var params="?phrase1={0}&phrase2={1}&langues={2}"
+      .format(encodeURIComponent(ancienTexte),
+              encodeURIComponent(nouveauTexte),
+              encodeURIComponent(langues));
+    var lien=$("<a>",{target: "perles",
+                      href: "http://georges.khaznadar.fr/perles/"+params})
+      .append($("<img>",{src: "perle.gif",
+                         alt: "Perle",
+                         title: "Cliquer ici pour conserver cette perle",
+                         height: "12px"}));
+    $("#archive").append($("<li>").text(archiveCSV).append(lien));
   }
 }
 
@@ -114,7 +138,8 @@ function bableur_init(l, targetId){
   /******************************
    * boîte pour définir la chaîne de langues
    *****************************/
-  target.append($("<div>", {id: "langBox"})
+  target.append($("<div>", {id: "langBox",
+                            class: "blancTransparent"})
 		.append($("<p>",{class: "langBoxTitle"}).text("Choix des langues"))
 		.append($("<p>",{class: "langBoxHelp"}).text("Tirez-glissez les étiquettes.")
                         .append($("<br>"))
@@ -134,7 +159,8 @@ function bableur_init(l, targetId){
   /******************************
    * boîte pour l'archivage de traductions
    *****************************/
-  target.append($("<div>", {id: "archiveBox"})
+  target.append($("<div>", {id: "archiveBox",
+                            class: "blancTransparent"})
 		.append($("<h2>").text("archive de traductions"))
 		.append($("<ol>", {class : "archive", id : "archive"}))
 	       );
@@ -171,7 +197,8 @@ function chaineTrad_init(l, target){
     var trad = $("#translationBox"); // on récupère la boîte de traductions
     trad.empty();                    // et on la vide
   } else {                           // ou alors on crée la boîte de traductions
-    var trad = $("<div>", {id: "translationBox"})
+    var trad = $("<div>", {id: "translationBox",
+                           class: "blancTransparent"})
     target.append(trad);
   }
   trad.append(roundTranslateButton(l));

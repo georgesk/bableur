@@ -46,6 +46,10 @@ li.lienDrole {
     padding:10px;
 }
 
+.blancTransparent {
+    background: rgba(255,255,255,0.5);     
+}
+
 #archiveBox {
     border: 1px dashed navy;
     margin: 3px;
@@ -66,7 +70,6 @@ li.lienDrole {
     margin: 3px;
     padding: 3px;
     clear: both;
-    background: rgba(255,255,255,0.5);     
 }
 
 
@@ -81,10 +84,17 @@ li.lienDrole {
 .ui-sortable-placeholder * { 
     visibility: hidden; 
 }
-body{background-image: URL(tourbabel.jpg); background-size: cover;}
 
-.boitetranslator{background: white; display: inline;  }
+body { 
+    background-image: URL(tourbabel.jpg);
+    background-size: cover;
+}
 
-#date{position:absolute;
-      bottom:0;
-      }
+.boitetranslator {
+    background: white; 
+    display: inline;  
+}
+
+#date {
+    display: inline;  
+}

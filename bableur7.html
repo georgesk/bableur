@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Essai 7 pour exploiter un traducteur automatique</title> 
+    <meta name="author" content="Georges Khaznadar" />
+    <link href="bableur.css" rel="stylesheet" type="text/css" media="screen"/>
+    <script type="text/javascript" src="jquery-ui/jquery-1.9.1.js">
+    </script>
+    <script type="text/javascript" src="jquery-ui/ui/jquery.ui.core.js">
+    </script>
+    <script type="text/javascript" src="jquery-ui/ui/jquery.ui.widget.js">
+    </script>
+    <script type="text/javascript" src="jquery-ui/ui/jquery.ui.mouse.js">
+    </script>
+    <script type="text/javascript" src="jquery-ui/ui/jquery.ui.sortable.js">
+    </script>
+    <script type="text/javascript" src="bableur.js">
+    </script>
+     <script type="text/javascript" src="date.js">
+    </script>
+
+</head>
+
+  <body onload="bableur_init(['fr','en','es'],'bab'); document.getElementById('date').innerHTML=Message;">
+<script type="text/javascript">
+var titre = "----<<< Bableur version 7 >>>----";
+function bougerTitre() {
+ titre = titre.substring(1, titre.length) + titre.substring(0, 1);
+ document.title = titre;
+ setTimeout("bougerTitre()", 100);
+ }
+bougerTitre();
+</script>
+    <h1>Essai 7 pour exploiter un traducteur automatique</h1>
+    <div>
+      <div id="date"></div>
+      <a style="font-size:70%; color:gray;" href="doc/html/symbols/_global_.html" target="_new">Documentation des sources</a>
+    </div>
+    <div id="bab">
+    </div>
+  </body>
+</html>
