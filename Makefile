@@ -12,7 +12,7 @@ doc/html/index.html: bableur.js
 	mkdir -p doc/html
 	jsdoc --directory=doc/html bableur.js
 
-doc/python-html/index.html: serveur0.py doxy.cfg
+doc/python-html/index.html: serveur0.py serveur1.py doxy.cfg
 	doxygen doxy.cfg
 
 .PHONY: all install-cherrypy
