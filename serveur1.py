@@ -6,26 +6,34 @@ current_dir       = os.path.dirname(os.path.abspath(__file__))
 current_ipaddress = '127.0.0.1'
 current_port      = 8080
 
-import cherrypy, sqlite3, os.path
+import cherrypy, shelve, os.path, datetime
 from datetime import datetime
 
-class MyCursor(object):
+class PerleCursor(object):
     """
-    Classeservant à enrichir sqlite3.Cursor de quelques méthodes
-    supplémentaires
+    Classe servant à parcourir les perles enregistrées
     """
-    def __init__(self, other):
-        self.cursor= other
+    def __init__(self, perleList):
+        """
+        Constructeur
+        @param perleList une liste de perles
+        """
+        self.list = perleList
 
-    def getDataLines(self, columns, table):
+    def getDataLines(self, columns, table=None):
         """
         Effectue une requête dans la base de données et renvoie un itérable
         contenant les données demandées
         @param columns identifiants de colonnes
-        @param table identifiant de tableau
+        @param table identifiant de tableau (inutile ici)
         """
-        request="SELECT " + ", ".join(columns) + " FROM "+ table
-        return self.cursor.execute(request)
+        result=[]
+        for perle in self.list:
+            l=[]
+            for c in columns:
+                l.append(getattr(perle,c))
+            result.append(l)
+        return result
 
 class TableData(object):
     """
@@ -114,6 +122,22 @@ class TableFormat(object):
         result += "</table>\n"
         return result
 
+class Perle(object):
+    """
+    Une classe repré&sentant une perle intéressante à montrer, issue de Bableur
+    """
+    def __init__(self, orig, trad, lang):
+        """
+        Constructeur
+        @param orig la phrase originale
+        @param trad sa traduction
+        @param lang la chaîne de langues utilisées pour la traduction
+        """
+        self.orig=orig
+        self.trad=trad
+        self.lang=lang
+        self.timeStamp=datetime.now()
+
 class PerleServer(object):
     """
     Une classe pour servir les perles de traduction de Bableur, et pour
@@ -132,17 +156,11 @@ class PerleServer(object):
         if os.path.exists(dbName):
             # on ne recrée pas une base de données préexistante
             return
-        conn = sqlite3.connect(dbName)
-        c = conn.cursor()
-        c = myCursor(c) # ajoute des méthodes
-        # Création de la table "perles"
-        c.execute('''CREATE TABLE perles
-             (orig TEXT, trad TEXT, lang TEXT, datecreated DATE, id INTEGER PRIMARY KEY ASC)''')
-        # Création de la table "votes"
-        c.execute("""CREATE TABLE votes
-              (perleId INTEGER, pseudo TEXT, datevote DATE, id INTEGER PRIMARY KEY ASC)""")
-        conn.commit()
-        conn.close()
+        ## création de la base de données à l'aide du module "shelve"
+        d = shelve.open(self.dbName)
+        d["perles"]=[] # crée une liste de perles vide
+        d["votes"]=[]  # crée une liste de votes vide
+        d.close()
 
     def headerHtml(self, title=u"Serveur de perles basé sur CherryPy"):
         """
@@ -207,9 +225,9 @@ class PerleServer(object):
         (sert à éviter un blocage au cas où des paramètres inattendus sont
         reçus lors d'une requête)
         """
-        conn = sqlite3.connect(self.dbName)
-        c = conn.cursor()
-        mc = MyCursor(c)
+        d = shelve.open(self.dbName)
+        perles=d["perles"]
+        votes=d["votes"]
         ##########################################
         # En-tête HTML
         ##########################################
@@ -218,36 +236,30 @@ class PerleServer(object):
         # traitement d'une requête d'ajout dans la base de données
         ##########################################
         if (phrase1 and phrase2 and langues):
-            d=u"%s" %datetime.now()
-            c.execute("""INSERT INTO perles 
-                      (orig, trad, lang, datecreated)
-                      VALUES (?,?,?,?)""",
-                      (phrase1, phrase2, langues, d))
-            conn.commit()
+            perles.append(Perle(phrase1, phrase2,langues ))
+            d["perles"]=perles
+            ## print "=======================> GRRRR", p
             result+= self.modalDialog(u"Modification de la base de données",
-                                      [phrase1, phrase2, langues, d])
+                                      d)
         ##########################################
         # traitement par défaut : on affiche le contenu de la BDD
         ##########################################
-        c.execute("SELECT count(*) FROM perles")
-        # self.conn.commit()
-        compte = c.fetchone()[0]
-        result+= u"<h1>La base de données contient %d perles :</h1>" %compte
+        result+= u"<h1>La base de données contient %d perles :</h1>" %len(d["perles"])
         ##########################################
         # tableau des perles existantes
         ##########################################
-        td= TableData(("id", "orig", "trad", "lang", "datecreated"),
-                      ("%03d","%s",  "%s",   "%s",   "%s"),
-                      (u"Id",u"Phrase de départ",u"Phrase d'arrivée",u"Chaîne de langues",u"Date d'enregistrement"),
-                      ("perleid","p1","p2","lang","date")
+        td= TableData(("orig", "trad", "lang", "timeStamp"),
+                      ("%s",  "%s",   "%s",   "%s"),
+                      (u"Phrase de départ",u"Phrase d'arrivée",u"Chaîne de langues",u"Date d'enregistrement"),
+                      ("p1","p2","lang","date")
                       )
         tf= TableFormat("perles", "perleTable", td)
-        result += tf.table(mc)
+        result += tf.table(PerleCursor(d["perles"]))
         ##########################################
         # fin du traitement par défaut
         ##########################################
         result += "</body>"
-        conn.close()
+        d.close()
         return result
 
 
@@ -257,4 +269,4 @@ class PerleServer(object):
 
 
 if __name__=='__main__':
-    cherrypy.quickstart(PerleServer('example.db'), config="serveur0.conf")
+    cherrypy.quickstart(PerleServer('example1.db'), config="serveur0.conf")
