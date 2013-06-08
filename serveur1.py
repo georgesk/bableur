@@ -6,8 +6,7 @@ current_dir       = os.path.dirname(os.path.abspath(__file__))
 current_ipaddress = '127.0.0.1'
 current_port      = 8080
 
-import cherrypy, shelve, os.path, datetime
-from datetime import datetime
+import cherrypy, shelve, os.path, datetime, types
 
 class PerleCursor(object):
     """
@@ -31,7 +30,20 @@ class PerleCursor(object):
         for perle in self.list:
             l=[]
             for c in columns:
-                l.append(getattr(perle,c))
+                if len(c) == 2 and isinstance(c[0], types.FunctionType):
+                    # on doit appliquer la fonction c[0] aux arguments
+                    # pointés par c[1]
+                    args=[]
+                    for argName in c[1]:
+                        if isinstance(argName, str):
+                            val=getattr(perle, argName, None)
+                            args.append(val)
+                        else:
+                            args.append(argName)
+                    l.append(c[0](*args))
+                else:
+                    val=getattr(perle, c, None)
+                    l.append(val)
             result.append(l)
         return result
 
@@ -104,8 +116,12 @@ class TableFormat(object):
         for ligne in c.getDataLines(self.tdata.columns, self.tname):
             result+= u"<tr>"
             for li,fo,cl in zip(ligne, self.tdata.formats, self.tdata.layouts):
-                fstring=u"<td class='%%s'>%s</td>" % fo
-                result += fstring % (cl,li)
+                if "%" in fo:
+                    fstring=u"<td class='%%s'>%s</td>" % fo
+                    result += fstring % (cl,li)
+                else:
+                    # fo n'est pas un format mais un objet en javascript
+                    result +="<td>%s</td>" %li
             result+= u"</tr>\n"
         return result
 
@@ -122,6 +138,30 @@ class TableFormat(object):
         result += "</table>\n"
         return result
 
+class Vote(object):
+    """
+    Une classe pour définir un vote, pour une perle de Bableur
+    """
+    def __init__(self, stamp, saveur='ordinaire'):
+        """
+        Constructeur
+        @param stamp un timbre à date de perle
+        @param saveur la qualité particulière du vote
+        """
+        self.timeStamp=stamp
+        self.saveur=saveur
+
+    def __str__(self):
+        """
+        @return une chaîne représentant un vote
+        """
+        return "Vote %s, %s" %(self.saveur, self.timeStamp)
+    def __repr__(self):
+        """
+        @return une chaîne "système" représentant un vote
+        """
+        return self.__str__()
+
 class Perle(object):
     """
     Une classe repré&sentant une perle intéressante à montrer, issue de Bableur
@@ -136,8 +176,31 @@ class Perle(object):
         self.orig=orig
         self.trad=trad
         self.lang=lang
-        self.timeStamp=datetime.now()
+        self.timeStamp=datetime.datetime.now()
 
+def delButton(timeStamp):
+    """
+    @param timeStamp une date identifiant un enregistrement à supprimer
+    @return du code HTML pour un bouton d'effacement
+    """
+    return "<a href='?delperle=%s'><img src='del.png' alt=\"supprimer l'enregistrement\" title=\"supprimer l'enregistrement\" /></a>" %timeStamp
+
+def voteButton(timeStamp):
+    """
+    @param timeStamp une date identifiant un enregistrement
+    @return du code HTML pour un bouton de vote
+    """
+    return "<a href='?voteperle=%s'><img src='vote.png' alt=\"Voter pour l'enregistrement\" title=\"Voter pour l'enregistrement\" /></a>" %timeStamp
+
+def nbVotes(timeStamp, votes):
+    """
+    @param timeStamp une date identifiant un enregistrement
+    @param votes une liste d'objets Vote
+    @return du code HTML pour un nombre de votes concernant cet enregistrement
+    """
+    pour=[vote for vote in votes if str(vote.timeStamp)==str(timeStamp)]
+    return len(pour)
+    
 class PerleServer(object):
     """
     Une classe pour servir les perles de traduction de Bableur, et pour
@@ -212,13 +275,18 @@ class PerleServer(object):
 </div>
 """ %(title, contents)
       
-    def index(self, phrase1=None, phrase2=None, langues=None, *args, **kw):
+    def index(self, phrase1=None, phrase2=None, langues=None, 
+              delperle=None, voteperle=None, addvote=None,
+              *args, **kw):
         """
         Implémentation du service en une seule page (index). Les arguments
         arrivent par un méthode GET.
         @param phrase1 phrase avant traduction
         @param phrase2 phrase après traduction
         @param langues une chaîne de langues pour la traduction
+        @param delperle un timbre à date de perle à supprimer
+        @param voteperle un timbre à date de perle pour un vote
+        @param addvote un timbre à date de perle pour finaliser un vote
         @param *args liste des arguments non nommés de la requête
         (pas utilisée dans ce contexte)
         @param **kw dictionnaire des arguments nommés de la requête
@@ -238,9 +306,52 @@ class PerleServer(object):
         if (phrase1 and phrase2 and langues):
             perles.append(Perle(phrase1, phrase2,langues ))
             d["perles"]=perles
-            ## print "=======================> GRRRR", p
-            result+= self.modalDialog(u"Modification de la base de données",
-                                      d)
+            comment=u"Ajout de « %s  ...»" %phrase1[:25]
+            result+= self.modalDialog(u"Modification de la base de données", comment)
+        ##########################################
+        # traitement d'une requête d'effacement de la base de données
+        ##########################################
+        elif (delperle):
+            toDel=[perle for perle in perles if str(perle.timeStamp)==delperle]
+            comment=u""
+            for perle in toDel:
+                perles.remove(perle)
+                d["perles"]=perles
+                comment+=u"« %s ... », %s" %(perle.orig[:25], perle.timeStamp)
+            result+= self.modalDialog(u"Suppression effectuée", comment)
+            ## retrait des votes inutiles
+            toDel=[vote for vote in votes if str(vote.timeStamp)==str(delperle)]
+            for v in toDel:
+                votes.remove(v)
+                d["votes"]=votes
+        ##########################################
+        # traitement d'une requête de vote
+        ##########################################
+        elif (voteperle):
+            sel=[perle for perle in perles if str(perle.timeStamp)==voteperle]
+            if len(sel) > 0:
+                perle=sel[0]
+                comment=u"""
+phrase d'origine : %s<br/>
+phrase traduite : %s<br/>
+<center><input type='button' value='je vote pour !' onclick='javascript: document.location.href ="?addvote=%s"' /></center>
+""" %(perle.orig, perle.trad, perle.timeStamp)
+                result+= self.modalDialog(u"Vote pour une perle", comment)
+        ##########################################
+        # prise en compte d'un vote exprimé
+        ##########################################
+        elif (addvote):
+            sel=[perle for perle in perles if str(perle.timeStamp)==addvote]
+            if len(sel) > 0:
+                perle=sel[0]
+                votes.append(Vote(addvote))
+                d["votes"]=votes
+                comment=u"""
+phrase d'origine : %s<br/>
+phrase traduite : %s<br/>
+<b>Le vote a été pris en compte.</b>
+""" %(perle.orig, perle.trad)
+                result+= self.modalDialog(u"Vote pour une perle", comment)
         ##########################################
         # traitement par défaut : on affiche le contenu de la BDD
         ##########################################
@@ -248,10 +359,14 @@ class PerleServer(object):
         ##########################################
         # tableau des perles existantes
         ##########################################
-        td= TableData(("orig", "trad", "lang", "timeStamp"),
-                      ("%s",  "%s",   "%s",   "%s"),
-                      (u"Phrase de départ",u"Phrase d'arrivée",u"Chaîne de langues",u"Date d'enregistrement"),
-                      ("p1","p2","lang","date")
+        td= TableData(((nbVotes,("timeStamp", votes)),
+                       "orig", "trad", "lang", "timeStamp",
+                       (delButton,("timeStamp",)),
+                       (voteButton,("timeStamp",)),
+                       ),
+                      ("special", "%s",  "%s",   "%s",   "%s", "special", "special"),
+                      (u"Popularité", u"Phrase de départ",u"Phrase d'arrivée",u"Chaîne de langues",u"Date d'enregistrement", u"Suppr.", u"Vote"),
+                      ("popularite","p1","p2","lang","date","button","button")
                       )
         tf= TableFormat("perles", "perleTable", td)
         result += tf.table(PerleCursor(d["perles"]))
