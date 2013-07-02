@@ -160,7 +160,7 @@ function bableur_init(l, targetId){
    * boîte pour l'archivage de traductions
    *****************************/
   target.append($("<div>", {id: "archiveBox",
-                            class: "blancTransparent"})
+                            class: "blancTransparent1"})
 		.append($("<h2>").text("archive de traductions"))
 		.append($("<ol>", {class : "archive", id : "archive"}))
 	       );
